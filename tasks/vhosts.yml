@@ -4,8 +4,8 @@
     path: "{{ item }}"
     state: directory
   with_items:
-    - {{ nginx_path_vhosts_conf }}
-    - {{ nginx_path_vhosts }}
+    - "{{ nginx_path_vhosts_conf }}"
+    - "{{ nginx_path_vhosts }}"
   notify: reload nginx
 
 - name: Configure nginx (default server).
