@@ -1,5 +1,7 @@
 # Ansible role: nginx
 
+[![Build Status](https://travis-ci.org/jodyboucher/ansible-role-nginx.svg?branch=master)](https://travis-ci.org/jodyboucher/ansible-role-nginx)
+
 An [Ansible](https://www.ansible.com/) role that installs and configures nginx web server.
 
 This role is designed for Ubuntu 16.04 Xenial.
