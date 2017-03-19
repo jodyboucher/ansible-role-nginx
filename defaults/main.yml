@@ -13,8 +13,10 @@ nginx_core_worker_processes: auto
 nginx_core_worker_connections: 1024
 nginx_core_multi_accept: off
 nginx_core_error_log: "/var/log/nginx/error.log warn"
+
+# Any additional core module settings
 nginx_core_extra: ""
-# Example extra main options, used within nginx's 'main' context:
+# Example extra core module (main context) settings:
 #   nginx_core_extra: |
 #     env VARIABLE;
 #     worker_processes 4;
@@ -57,15 +59,7 @@ nginx_http_gzip_types: |
     text/x-component
     text/x-cross-domain-policy;
 
-nginx_http_extra: ""
-# Example extra http options, used within the 'http' context:
-#    nginx_http_extra: |
-#      proxy_buffering    off;
-#      proxy_set_header   X-Real-IP $remote_addr;
-#      proxy_set_header   X-Scheme $scheme;
-#      proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-#      proxy_set_header   Host $http_host;
-
+# Array of http upstream module settings
 nginx_http_upstreams: []
 # - name: backend
 #   strategy: "ip_hash"
@@ -76,6 +70,17 @@ nginx_http_upstreams: []
 #     "unix:/tmp/backend3"
 #   }
 
-nginx_sites:
-  example.com:
-    enable_ssl: true
+# Any additional http module settings
+nginx_http_extra: ""
+# Example extra http options:
+#    nginx_http_extra: |
+#      proxy_buffering    off;
+#      proxy_set_header   X-Real-IP $remote_addr;
+#      proxy_set_header   X-Scheme $scheme;
+#      proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+#      proxy_set_header   Host $http_host;
+
+# Any sites (vhosts) to configure
+nginx_sites: []
+#  example.com:
+#    enable_ssl: true
