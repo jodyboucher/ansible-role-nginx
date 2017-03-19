@@ -1,0 +1,39 @@
+---
+sudo: required
+
+services:
+  - docker
+
+env:
+  - os: ubuntu1604
+    docker_run_cmd: /lib/systemd/systemd
+    docker_run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    playbook: test.yml
+
+before_install:
+  # Get a clean container for the tests to execute in.
+  - docker pull jodyboucher/${os}-ansible
+
+script:
+  # temp file to hold container id
+  - file_container_id=$(mktemp)
+
+  # Run container in detached state.
+  - docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${docker_run_opts} jodyboucher/${os}-ansible "${docker_run_cmd}" > "${file_container_id}"
+
+  # TEST: role has valid syntax.
+  - docker exec --tty "$(cat ${file_container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} --syntax-check
+
+  # TEST: role tasks execute without failures
+  - docker exec --tty "$(cat ${file_container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook}
+
+  # TEST: role is indempotent
+  - file_idempotence_output=$(mktemp)
+  - >
+    docker exec "$(cat ${file_container_id})" ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} | tee -a ${file_idempotence_output}
+    tail ${file_idempotence_output}
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
+
+  # TEST: nginx is installed and running
