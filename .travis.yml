@@ -41,6 +41,3 @@ script:
 after_failure:
   # Output status of nginx service
   - docker exec --tty "$(cat $[container_id])" env TERM-xterm systemctl status nginx.service
-  # Output logs
-  - docker exec --tty "$(cat ${container_id})" env TERM=xterm cat /var/log/nginx/error.log
-  - docker exec --tty "$(cat ${container_id})" env TERM=xterm cat /var/log/nginx/access.log
