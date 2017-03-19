@@ -1,0 +1,31 @@
+---
+- name: reload nginx
+  debug:
+    msg: "validating config and reloading nginx..."
+  changed_when: true
+  notify:
+    - validate nginx configuration
+    - reload nginx - validated
+
+- name: restart nginx
+  debug:
+    msg: "validating config and restarting nignx..."
+  changed_when: true
+  notify:
+    - validate nginx configuration
+    - restart nginx - validated
+
+- name: validate nginx configuration
+  command: nginx -t
+  register: config_validate_result
+  changed_when: "config_validate_result.rc != 0"
+
+- name: reload nginx - validated
+  service:
+    name: nginx
+    state: reloaded
+
+- name: restart nginx - validated
+  service:
+    name: nginx
+    state: restarted

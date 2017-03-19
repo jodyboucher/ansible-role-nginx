@@ -1,0 +1,14 @@
+---
+- name: Add nginx PPA.
+  apt_repository:
+    repo: 'ppa:nginx/{{ nginx_ppa_version }}'
+    state: present
+    update_cache: yes
+  register: nginx_add_ppa_result
+  when: nginx_ppa_enable
+
+- name: Ensure nginx will reinstall if the PPA was just added.
+  apt:
+    name: nginx
+    state: absent
+  when: nginx_add_ppa_result.changed

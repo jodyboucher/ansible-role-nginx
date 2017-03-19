@@ -1,0 +1,85 @@
+# {{ ansible_managed }}
+# http://nginx.org/en/docs/dirindex.html
+
+user {{ nginx_user }};
+
+worker_processes {{ nginx_core_worker_processes }};
+
+events {
+  worker_connections  {{ nginx_core_worker_connections }};
+  multi_accept {{ nginx_core_multi_accept }};
+}
+
+# Log errors and warnings to this file
+# This is only used when you don't override it on a server{} level
+error_log  {{ nginx_error_log }};
+
+# The file storing the process ID of the main process
+pid        {{ nginx_pidfile }};
+
+{% if nginx_core_extra %}
+{{ nginx_core_extra}}
+{% endif %}
+
+http {
+  # Show/Hide nginx version information.
+  server_tokens {{ nginx_http_server_tokens }};
+
+  # Specify MIME types for files.
+  include       {{ nginx_path_mime_types_file }};
+  default_type  application/octet-stream;
+
+  # Update charset_types to match updated mime.types.
+  # text/html is always included by charset module.
+  charset_types text/css text/plain text/vnd.wap.wml application/javascript application/json application/rss+xml application/xml;
+
+  log_format  main  {{ nginx_log_format }};
+
+  # Log access to this file
+  # This is only used when you don't override it on a server{} level
+  access_log {{ nginx_http_access_log }} main buffer=16k;
+
+  # How long to allow each connection to stay idle.
+  # Longer values are better for each individual client, particularly for SSL,
+  # but means that worker connections are tied up longer.
+  keepalive_timeout {{ nginx_http_keepalive_timeout }};
+
+  # Speed up file transfers by using sendfile() to copy directly
+  # between descriptors rather than using read()/write().
+  sendfile        {{ nginx_http_sendfile }};
+
+  # Don't send out partial frames; this increases throughput
+  # since TCP frames are filled up before being sent out.
+  tcp_nopush      {{ nginx_http_tcp_nopush }};
+
+  client_max_body_size {{ nginx_http_client_max_body_size }};
+
+  gzip             {{ nginx_http_gzip }};
+  gzip_comp_level  {{ nginx_http_gzip_comp_level }};
+  gzip_min_length  {{ nginx_http_gzip_min_length }};
+  gzip_proxied     {{ nginx_http_gzip_proxied }};
+  gzip_vary        {{ nginx_http_gzip_vary }};
+  gzip_types
+    {{ nginx_http_gzip_types | indent(4) }}
+
+{% if nginx_http_extra %}
+  {{ nginx_http_extra | indent(2) }}
+{% endif %}
+
+{% for upstream in nginx_http_upstreams %}
+  upstream {{ upstream.name }} {
+{% if upstream.strategy is defined %}
+    {{ upstream.strategy }};
+{% endif %}
+{% for server in upstream.servers %}
+    server {{ server }};
+{% endfor %}
+{% if upstream.keepalive is defined %}
+    keepalive {{ upstream.keepalive }};
+{% endif %}
+  }
+{% endfor %}
+
+  include {{ nginx_path_conf_directory }}/*.conf;
+  include {{ nginx_path_vhosts }}/*;
+}
