@@ -37,8 +37,3 @@ script:
     || (echo 'Idempotence test: fail' && exit 1)
 
   # TEST: nginx is installed and running
-
-after_failure:
-  # Output status of nginx service
-  - docker exec --tty "$(cat ${file_container_id})" env TERM-xterm systemctl status nginx.service
-  - docker exec --tty "$(cat ${file_container_id})" env TERM=xterm journalctl -xe
