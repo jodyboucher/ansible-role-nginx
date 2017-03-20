@@ -10,8 +10,11 @@
 
 - name: Remove default nginx vhost config
   file:
-    path: "{{ nginx_path_vhosts_conf }}.default"
+    path: "{{ item }}"
     state: absent
+  with_items:
+    - "{{ nginx_path_vhosts }}/default"
+    - "{{ nginx_path_vhosts_conf }}/default"
   notify: restart nginx
 
 - name: Configure nginx (default server)
