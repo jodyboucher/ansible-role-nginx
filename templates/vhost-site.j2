@@ -2,68 +2,68 @@
 
 # listen on the www (HTTP/HTTPS ports) subdomain, redirect to naked domain
 server {
-  listen 80;
-  listen [::]:80;
+    listen 80;
+    listen [::]:80;
 
 {% if item.value.ssl_enabled | default(true) %}
-  listen 443 ssl;
-  listen [::]:443 ssl;
+    listen 443 ssl;
+    listen [::]:443 ssl;
 
-  include {{ nginx_path_ssl_conf }}/ssl-common.conf;
-  include {{ nginx_path_ssl_conf}}/ssl-{{ item.key }}.conf;
+    include {{ nginx_path_ssl_conf }}/ssl-common.conf;
+    include {{ nginx_path_ssl_conf}}/ssl-{{ item.key }}.conf;
 {% endif %}
 
-  # listen on the www host
-  server_name www.{{ item.key }}
+    # listen on the www host
+    server_name www.{{ item.key }}
 
-  # and redirect to the non-www host (declared below)
+    # and redirect to the non-www host (declared below)
 {% if item.value.ssl_enabled | default(true) %}
-  return 301 https://{{ item.key }}$request_uri;
+    return 301 https://{{ item.key }}$request_uri;
 {% else %}
-  return 301 http://{{ item.key }}$request_uri;
+    return 301 http://{{ item.key }}$request_uri;
 {% endif %}
 }
 
 {% if item.value.ssl_enabled | default(true) %}
 # listen on the naked domain HTTP port, redirect to HTTPS
 server {
-  listen 80;
-  listen [::]:80;
+    listen 80;
+    listen [::]:80;
 
-  server_name {{ item.key }};
+    server_name {{ item.key }};
 
-  # Redirect all HTTP requests to HTTPS with a 301 Moved Permanently response.
-  return 301 https://$host$request_uri;
+    # Redirect all HTTP requests to HTTPS with a 301 Moved Permanently response.
+    return 301 https://$host$request_uri;
 }
 {% endif %}
 
 # listen on the naked domain HTTPS port and serve content
 server {
 {% if item.value.ssl_enabled | default(true) %}
-  listen 443 ssl http2;
-  listen [::]:443 ssl http2;
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
 
-  include {{ nginx_path_ssl_conf }}/ssl-common.conf;
-  include {{ nginx_path_ssl_conf }}/ssl-{{ item.key}}.conf;
+    include {{ nginx_path_ssl_conf }}/ssl-common.conf;
+    include {{ nginx_path_ssl_conf }}/ssl-{{ item.key}}.conf;
 {% else %}
-  listen 80;
-  listen [::]:80;
+    listen 80;
+    listen [::]:80;
 {% endif %}
 
-  # The host name to respond to
-  server_name {{ item.key }};
-  root {{ item.value.site_root}};
-  index index.php;
+    # The host name to respond to
+    server_name {{ item.key }};
+    root {{ item.value.site_root}};
+    index index.php;
 
-  access_log {{ item.value.www_root }}/logs/{{ item.key }}.access.log main;
-  error_log  {{ item.value.www_root }}/logs/{{ item.key }}.error.log warn;
+    access_log {{ item.value.www_root }}/logs/{{ item.key }}.access.log main;
+    error_log  {{ item.value.www_root }}/logs/{{ item.key }}.error.log warn;
 
-  charset utf-8;
+    charset utf-8;
 
 {% if item.value.ssl_enabled | default(true) %}
   # enable well-known directory for Let's Encrypt Certbot
-  location ~ /\.well-known {
-    allow all;
-  }
+    location ~ /\.well-known {
+        allow all;
+    }
 {% endif %}
 }
