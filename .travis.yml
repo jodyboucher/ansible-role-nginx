@@ -38,8 +38,10 @@ script:
 
   # TEST:
   # Check nginx is running and rejecting requests missing Host HTTP header
+  - file_request_output=$(mktemp)
   - >
-    docker exec --tty "$(cat ${file_container_id})" env TERM=xterm curl http://127.0.0.1/
-    | grep '(52) Empty reply from server'
+    docker exec --tty "$(cat ${file_container_id})" env TERM=xterm curl -Lv http://127.0.0.1/ 2>&1 | tee -a ${file_request_output}
+    tail ${file_request_output}
+    | grep -q '(52) Empty reply from server'
     && (echo 'Properly refused request with missing Host header' && exit 0)
     || (echo 'Failed to refuse request with missing Host header' && exit 1)
