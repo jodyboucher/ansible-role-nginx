@@ -36,4 +36,10 @@ script:
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)
 
-  # TEST: nginx is installed and running
+  # TEST:
+  # Check nginx is running and rejecting requests missing Host HTTP header
+  - >
+    docker exec --tty "$(cat ${file_container_id})" env TERM=xterm curl http://127.0.0.1/
+    | grep '(52) Empty reply from server'
+    && (echo 'Properly refused request with missing Host header' && exit 0)
+    || (echo 'Failed to refuse request with missing Host header' && exit 1)
