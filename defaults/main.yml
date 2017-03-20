@@ -11,7 +11,7 @@ nginx_log_format: |
 # core module settings
 nginx_core_worker_processes: auto
 nginx_core_worker_connections: 1024
-nginx_core_multi_accept: off
+nginx_core_multi_accept: "off"
 nginx_core_error_log: "/var/log/nginx/error.log warn"
 
 # Any additional core module settings
@@ -22,17 +22,17 @@ nginx_core_extra: ""
 #     worker_processes 4;
 
 # http module settings
-nginx_http_server_tokens: on
+nginx_http_server_tokens: "off"
 nginx_http_access_log: /var/log/nginx/access.log
 nginx_http_keepalive_timeout: 20s
-nginx_http_sendfile: on
-nginx_http_tcp_nopush: on
+nginx_http_sendfile: "on"
+nginx_http_tcp_nopush: "on"
 nginx_http_client_max_body_size: "4m"
-nginx_http_gzip: on
+nginx_http_gzip: "on"
 nginx_http_gzip_comp_level: 5
 nginx_http_gzip_min_length: 256
 nginx_http_gzip_proxied: any
-nginx_http_gzip_vary: on
+nginx_http_gzip_vary: "on"
 nginx_http_gzip_types: |
     application/atom+xml
     application/javascript
