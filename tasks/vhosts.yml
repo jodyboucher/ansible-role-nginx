@@ -8,6 +8,12 @@
     - "{{ nginx_path_vhosts }}"
   notify: reload nginx
 
+- name: Remove default nginx vhost config
+  file:
+    path: "{{ nginx_path_vhosts_conf }}.default"
+    state: absent
+  notify: restart nginx
+
 - name: Configure nginx (default server)
   template:
     src: vhost-default.j2
