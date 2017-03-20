@@ -33,7 +33,7 @@ http {
     # text/html is always included by charset module.
     charset_types text/css text/plain text/vnd.wap.wml application/javascript application/json application/rss+xml application/xml;
 
-    log_format main {{ nginx_log_format | indent(17) }};
+    log_format main {{ nginx_log_format | indent(20) }};
 
     # Log access to this file
     # This is only used when you don't override it on a server{} level
