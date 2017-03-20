@@ -25,7 +25,7 @@ script:
   - docker exec --tty "$(cat ${file_container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} --syntax-check
 
   # TEST: role tasks execute without failures
-  - docker exec --tty "$(cat ${file_container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} -vvv
+  - docker exec --tty "$(cat ${file_container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook}
 
   # TEST: role is indempotent
   - file_idempotence_output=$(mktemp)
