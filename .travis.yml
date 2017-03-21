@@ -29,18 +29,18 @@ script:
 
   # TEST: role is indempotent
   - file_idempotence_output=$(mktemp)
+  - docker exec "$(cat ${file_container_id})" ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} | tee -a ${file_idempotence_output}
   - >
-    docker exec "$(cat ${file_container_id})" ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} | tee -a ${file_idempotence_output}
-    tail ${file_idempotence_output}
-    | grep -q 'changed=0.*failed=0'
+    tail ${file_idempotence_output} | grep -q 'changed=0.*failed=0'
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)
 
   # TEST:
   # Check nginx is running and rejecting requests missing Host HTTP header
   - file_request_output=$(mktemp)
+  - docker exec -tty "$(cat ${file_container_id})" env TERM=xterm curl -L http://127.0.0.1/ 2>&1 | tee ${file_request_output}
   - >
-    docker exec -tty "$(cat ${file_container_id})" env TERM=xterm curl -Lv http://127.0.0.1/ 2>&1 | grep -q '(52) Empty reply from server'
+    tail ${file_request_output} | grep -q '(52) Empty reply from server'
     && (echo 'Properly refused request with missing Host header' && exit 0)
     || (echo 'Failed to refuse request with missing Host header' && exit 1)
 
