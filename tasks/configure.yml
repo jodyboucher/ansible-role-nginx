@@ -16,8 +16,7 @@
     owner: root
     group: root
     mode: 0644
-  notify:
-    - reload nginx
+  notify: reload nginx
 
 - name: Configure nginx (main config)
   template:
@@ -26,8 +25,14 @@
     owner: root
     group: root
     mode: 0644
-  notify:
-    - reload nginx
+  notify: reload nginx
+
+- name: Generate strong Ephemeral Diffie-Hellman (DHE) parameter
+  command: openssl dhparam -out dhparams.pem 4096
+  args:
+    chdir: "{{ nginx_path_ssl_conf }}"
+    creates: "{{ nginx_path_ssl_conf }}/dhparams.pem"
+  notify: reload nginx
 
 - name: Configure nginx (common SSL configuration)
   template:
@@ -36,5 +41,4 @@
     owner: root
     group: root
     mode: 0644
-  notify:
-    - reload nginx
+  notify: reload nginx
