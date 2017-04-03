@@ -1,4 +1,6 @@
 # {{ ansible_managed }}
+
+# Configuration File - Nginx Server Configs
 # http://nginx.org/en/docs/dirindex.html
 
 user {{ nginx_user }};
@@ -61,6 +63,11 @@ http {
     gzip_vary        {{ nginx_http_gzip_vary }};
     gzip_types
       {{ nginx_http_gzip_types | indent(6) }}
+
+    fastcgi_cache_path /var/cache/nginx levels=1:2 keys_zone=WORDPRESS:5m max_size=250m inactive=60m;
+    fastcgi_cache_key "$scheme$request_method$host$request_uri";
+    fastcgi_cache_use_stale error timeout invalid_header http_500;
+    fastcgi_ignore_headers Cache-Control Expires Set-Cookie;
 
 {% if nginx_http_extra %}
     {{ nginx_http_extra | indent(2) }}
