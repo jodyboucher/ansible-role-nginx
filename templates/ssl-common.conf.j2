@@ -21,4 +21,4 @@ ssl_stapling_verify on;
 resolver 8.8.8.8 8.8.4.4 216.146.35.35 216.146.36.36 valid=300s;
 resolver_timeout 3s;
 
-ssl_dhparam /etc/ssl/certs/dhparam.pem;
+ssl_dhparam  {{ nginx_path_ssl_conf }}/dhparam.pem;
