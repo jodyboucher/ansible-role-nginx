@@ -5,6 +5,11 @@
     cache_valid_time: 86400
   changed_when: false
 
+- name: Install ssl-cert
+  apt:
+    name: ssl-cert
+    state: installed
+
 - name: Install nginx
   apt:
     name: nginx
