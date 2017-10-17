@@ -147,6 +147,7 @@ nginx_http_extra: ""
 nginx_sites: {}
 #  example.com:
 #    enable_ssl: true
+#    index: index.php
 
 ```
 

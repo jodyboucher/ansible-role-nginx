@@ -53,7 +53,7 @@ server {
     # The host name to respond to
     server_name {{ item.key }};
     root {{ item.value.site_root}};
-    index index.php;
+    index {{ item.value.index | default('index.html index.htm') }};
 
     access_log {{ item.value.www_root }}/logs/{{ item.key }}.access.log main;
     error_log  {{ item.value.www_root }}/logs/{{ item.key }}.error.log warn;
