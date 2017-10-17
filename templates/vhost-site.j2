@@ -66,4 +66,8 @@ server {
         allow all;
     }
 {% endif %}
+
+{% if item.value.extra is defined %}
+    {{ item.value.extra|indent(4) }}
+{% endif %}
 }
