@@ -7,14 +7,15 @@
     nginx_user: "{{ __nginx_user }}"
   when: nginx_user is not defined
 
-- include: setup-Ubuntu.yml
+- import_tasks: setup-Ubuntu.yml
   when: ansible_distribution == 'Ubuntu'
 
-- include: setup-Debian.yml
+- import_tasks: setup-Debian.yml
   when: ansible_os_family == 'Debian'
 
-- include: configure.yml
-- include: vhosts.yml
+- import_tasks: configure.yml
+
+- import_tasks: vhosts.yml
 
 - name: Ensure nginx is started and enabled to start at boot
   service:
