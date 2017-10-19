@@ -37,7 +37,7 @@
 
 - name: Configure nginx (sites)
   template:
-    src: vhost_site.j2
+    src: vhost-site.j2
     dest: "{{ nginx_path_vhosts_conf }}/{{ item.key }}.conf"
     owner: root
     group: root
