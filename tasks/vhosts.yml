@@ -59,6 +59,28 @@
   notify:
     - reload nginx
 
+- name: Create vhost site directories
+  file:
+    path: "{{ item.value.site_root}}/site"
+    state: directory
+    owner: "{{ nginx_user }}"
+    group: "{{ nginx_user }}"
+    mode: 0750
+  with_dict: "{{ nginx_vhosts }}"
+  when: nginx_vhosts | length > 0
+  notify: reload nginx
+
+- name: Create vhost log directories
+  file:
+    path: "{{ item.value.site_root}}/logs"
+    state: directory
+    owner: "{{ nginx_user }}"
+    group: "{{ nginx_user }}"
+    mode: 0750
+  with_dict: "{{ nginx_vhosts }}"
+  when: nginx_vhosts | length > 0
+  notify: reload nginx
+
 - name: Enable sites
   file:
     state: link

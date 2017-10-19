@@ -14,7 +14,7 @@ server {
 {% endif %}
 
     # listen on the www host
-    server_name www.{{ item.key }}
+    server_name www.{{ item.key }};
 
     # and redirect to the non-www host (declared below)
 {% if item.value.enable_ssl | default(true) %}
