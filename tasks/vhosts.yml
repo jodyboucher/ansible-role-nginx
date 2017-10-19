@@ -50,7 +50,7 @@
 - name: Configure nginx (SSL for sites)
   template:
     src: ssl-site.conf.j2
-    dest: "{{ nginx_path_ssl_conf }}/{{ item.key }}.conf"
+    dest: "{{ nginx_path_ssl_conf }}/ssl-{{ item.key }}.conf"
     owner: root
     group: root
     mode: 0644
