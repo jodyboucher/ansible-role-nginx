@@ -1,4 +1,4 @@
-# {{ ansible managed }}
+# {{ ansible_managed }}
 
 # listen on the www (HTTP/HTTPS ports) subdomain, redirect to naked domain
 server {
@@ -52,11 +52,11 @@ server {
 
     # The host name to respond to
     server_name {{ item.key }};
-    root {{ item.value.site_root}};
+    root {{ item.value.site_root}}/site;
     index {{ item.value.index | default('index.html index.htm') }};
 
-    access_log {{ item.value.www_root }}/logs/{{ item.key }}.access.log main;
-    error_log  {{ item.value.www_root }}/logs/{{ item.key }}.error.log warn;
+    access_log {{ item.value.site_root }}/logs/{{ item.key }}.access.log main;
+    error_log  {{ item.value.site_root }}/logs/{{ item.key }}.error.log warn;
 
     charset utf-8;
 

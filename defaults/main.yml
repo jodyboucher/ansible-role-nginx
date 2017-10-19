@@ -83,6 +83,7 @@ nginx_http_extra: ""
 # Any sites (vhosts) to configure
 nginx_vhosts: {}
 #  example.com:
+#    site_root: /var/www/example_com
 #    enable_ssl: true
 #    index: index.php
 #    extra: |
