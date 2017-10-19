@@ -145,7 +145,7 @@ nginx_http_extra: ""
 #      proxy_set_header   Host $http_host;
 
 # Any sites (vhosts) to configure
-nginx_sites: {}
+nginx_vhosts: {}
 #  example.com:
 #    enable_ssl: true
 #    index: index.php
