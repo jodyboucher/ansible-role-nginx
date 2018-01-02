@@ -35,7 +35,7 @@
   notify:
    - reload nginx
 
-- name: Configure nginx (sites)
+- name: Configure nginx (general sites)
   template:
     src: vhost-site.j2
     dest: "{{ nginx_path_vhosts_conf }}/{{ item.key }}.conf"
@@ -43,7 +43,23 @@
     group: root
     mode: 0644
   with_dict: "{{ nginx_vhosts }}"
-  when: nginx_vhosts | length > 0
+  when: 
+    - nginx_vhosts | length > 0
+    - item.value.is_api == false | default(false)
+  notify:
+    - reload nginx
+
+- name: Configure nginx (api sites)
+  template:
+    src: vhost-api.j2
+    dest: "{{ nginx_path_vhosts_conf }}/{{ item.key }}.conf"
+    owner: root
+    group: root
+    mode: 0644
+  with_dict: "{{ nginx_vhosts }}"
+  when: 
+    - nginx_vhosts | length > 0
+    - item.value.is_api == true | default(false)
   notify:
     - reload nginx
 

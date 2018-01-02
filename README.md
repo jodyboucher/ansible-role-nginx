@@ -158,6 +158,11 @@ nginx_vhosts: {}
 #        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
 #        include fastcgi_params;
 #      }
+#  api.example.com:
+#    site_root: /var/www/api_example_com
+#    enable_ssl: true
+#    is_api: true
+#    upstream_name: api
 
 ```
 
