@@ -1,0 +1,58 @@
+# {{ ansible_managed }}
+
+{% if item.value.enable_ssl | default(true) %}
+# listen on the domain HTTP port, redirect to HTTPS
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name {{ item.key }};
+
+    # Redirect all HTTP requests to HTTPS with a 301 Moved Permanently response.
+    return 301 https://$host$request_uri;
+}
+{% endif %}
+
+# listen on the domain HTTPS port and serve content
+server {
+{% if item.value.enable_ssl | default(true) %}
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+
+    include {{ nginx_path_ssl_conf }}/ssl-common.conf;
+    include {{ nginx_path_ssl_conf }}/ssl-{{ item.key}}.conf;
+{% else %}
+    listen 80;
+    listen [::]:80;
+{% endif %}
+
+    # The host name to respond to
+    server_name {{ item.key }};
+
+    # forward requests to api
+    location / {
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_cache_bypass $http_upgrade;
+        proxy_pass http://{{item.value.upstream_name}}/;
+    }
+
+    access_log {{ item.value.site_root }}/logs/{{ item.key }}.access.log main;
+    error_log  {{ item.value.site_root }}/logs/{{ item.key }}.error.log warn;
+
+    charset utf-8;
+
+{% if item.value.enable_ssl | default(true) %}
+  # enable well-known directory for Let's Encrypt Certbot
+    location ~ /\.well-known {
+        allow all;
+    }
+{% endif %}
+
+{% if item.value.extra is defined %}
+    {{ item.value.extra|indent(4) }}
+{% endif %}
+}
