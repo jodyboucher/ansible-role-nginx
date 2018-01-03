@@ -55,8 +55,8 @@ server {
     root {{ item.value.site_root}}/site;
     index {{ item.value.index | default('index.html index.htm') }};
 
-    access_log {{ item.value.site_root }}/logs/{{ item.key }}.access.log main;
-    error_log  {{ item.value.site_root }}/logs/{{ item.key }}.error.log warn;
+    access_log {{ item.value.site_root }}/logs/access.log main;
+    error_log  {{ item.value.site_root }}/logs/error.log warn;
 
     charset utf-8;
 
