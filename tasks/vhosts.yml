@@ -45,7 +45,7 @@
   with_dict: "{{ nginx_vhosts }}"
   when: 
     - nginx_vhosts | length > 0
-    - item.value.is_api == false | default(false)
+    - (item.value.is_api | default(false)) == false
   notify:
     - reload nginx
 
@@ -59,7 +59,7 @@
   with_dict: "{{ nginx_vhosts }}"
   when: 
     - nginx_vhosts | length > 0
-    - item.value.is_api == true | default(false)
+    - (item.value.is_api | default(false) == true
   notify:
     - reload nginx
 
