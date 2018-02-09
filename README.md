@@ -123,6 +123,9 @@ nginx_http_gzip_types: |
     text/x-component
     text/x-cross-domain-policy;
 
+# Enable FastCGI caching
+nginx_http_fastcgi_cache_enable: false
+
 # Array of http upstream module settings
 nginx_http_upstreams: []
 # - name: backend

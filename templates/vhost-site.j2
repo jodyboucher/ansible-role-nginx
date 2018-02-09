@@ -61,7 +61,7 @@ server {
     charset utf-8;
 
 {% if item.value.enable_ssl | default(true) %}
-  # enable well-known directory for Let's Encrypt Certbot
+    # enable well-known directory for Let's Encrypt Certbot
     location ~ /\.well-known {
         allow all;
     }
