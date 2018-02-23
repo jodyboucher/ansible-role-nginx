@@ -11,9 +11,6 @@ ssl_session_cache         shared:SSL:10m;
 ssl_session_timeout       24h;
 ssl_session_tickets       off;
 
-# HSTS (HTTP Strict Transport Security) (15768000 seconds = 6 months)
-add_header Strict-Transport-Security max-age=15768000;
-
 # OCSP stapling.
 ssl_stapling on;
 ssl_stapling_verify on;

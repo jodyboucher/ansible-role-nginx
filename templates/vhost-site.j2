@@ -60,6 +60,8 @@ server {
 
     charset utf-8;
 
+    include {{ nginx_path_vhosts_conf }}/http-headers.conf;
+
 {% if item.value.enable_ssl | default(true) %}
     # enable well-known directory for Let's Encrypt Certbot
     location ~ /\.well-known {

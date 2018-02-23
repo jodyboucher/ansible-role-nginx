@@ -17,6 +17,16 @@
     - "{{ nginx_path_vhosts_conf }}/default"
   notify: restart nginx
 
+- name: Add HTTP Headers conf
+  template:
+    src: http-headers.conf.j2
+    dest: "{{ nginx_path_vhosts_conf }}/http-headers.conf"
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - reload nginx
+
 - name: Configure nginx (default server)
   template:
     src: vhost-default.j2
@@ -43,7 +53,7 @@
     group: root
     mode: 0644
   with_dict: "{{ nginx_vhosts }}"
-  when: 
+  when:
     - nginx_vhosts | length > 0
     - (item.value.is_api | default(false)) == false
   notify:
@@ -57,7 +67,7 @@
     group: root
     mode: 0644
   with_dict: "{{ nginx_vhosts }}"
-  when: 
+  when:
     - nginx_vhosts | length > 0
     - (item.value.is_api | default(false)) == true
   notify:
