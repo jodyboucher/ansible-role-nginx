@@ -7,6 +7,13 @@ user {{ nginx_user }};
 
 worker_processes {{ nginx_core_worker_processes }};
 
+# The file storing the process ID of the main process
+pid        {{ nginx_pidfile }};
+
+{% if nginx_enable_geoip %}
+load_module modules/ngx_http_geoip_module.so;
+{% endif %}
+
 events {
     worker_connections  {{ nginx_core_worker_connections }};
     multi_accept {{ nginx_core_multi_accept }};
@@ -16,15 +23,8 @@ events {
 # This is only used when you don't override it on a server{} level
 error_log  {{ nginx_core_error_log }};
 
-# The file storing the process ID of the main process
-pid        {{ nginx_pidfile }};
-
 {% if nginx_core_extra %}
 {{ nginx_core_extra}}
-{% endif %}
-
-{% if nginx_enable_geoip %}
-load_module modules/ngx_http_geoip_module.so;
 {% endif %}
 
 http {
