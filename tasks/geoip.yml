@@ -13,7 +13,7 @@
       register: nginx_download_geolite_country
 
     - name: Unpack GeoLite Country database
-      shell: gunzip {{nginx_download_geolite_country.dest}} 
+      shell: gunzip --force {{nginx_download_geolite_country.dest}} 
 
     - name: Download GeoLite City database
       get_url: 
@@ -22,5 +22,5 @@
       register: nginx_download_geolite_city
 
     - name: Unpack GeoLite City database
-      shell: gunzip {{nginx_download_geolite_city.dest}}
+      shell: gunzip --force {{nginx_download_geolite_city.dest}}
   when: (nginx_enable_geoip | default(true))
