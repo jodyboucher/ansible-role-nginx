@@ -1,0 +1,22 @@
+---
+- name: Set up GeoIp databases for nginx
+  block:
+    - name: Ensure GeoIP folder exists
+      file: 
+        path: "{{ nginx_path_geoip }}"
+        state: directory
+
+    - name: Download GeoLite Country database
+      get_url: "url={{ nginx_geoip_country_url }} dest=/tmp"
+      register: nginx_download_geolite_country
+
+    - name: Unpack GeoLite Country database
+      shell: "gunzip {{nginx_download_geolite_country.dest}} && mv /tmp/GeoLiteCountry.dat {{ nginx_path_geoip }}/"
+
+    - name: Download GeoLite City database
+      get_url: "url={{ nginx_geoip_city_url }} dest=/tmp"
+      register: nginx_download_geolite_city
+
+    - name: Unpack GeoLite City database
+      shell: "gunzip {{nginx_download_geolite_city.dest}} && mv /tmp/GeoLiteCity.dat {{ nginx_path_geoip }}/"
+  when: (nginx_enable_geoip | default(true))

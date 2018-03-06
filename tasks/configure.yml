@@ -9,13 +9,6 @@
     - "{{ nginx_path_vhosts }}"
   notify: reload nginx
 
-- name: Ensure nginx geoip path exist
-  file:
-    path: "{{ nginx_path_geoip }}"
-    state: directory
-  when: (nginx_enable_geoip | default(true)) == true
-  notify: reload nginx
-
 - name: Configure nginx (MIME types)
   template:
     src: mime.types.j2
