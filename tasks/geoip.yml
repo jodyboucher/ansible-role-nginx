@@ -7,16 +7,20 @@
         state: directory
 
     - name: Download GeoLite Country database
-      get_url: "url={{ nginx_geoip_country_url }} dest=/tmp"
+      get_url: 
+        url: "{{ nginx_geoip_country_url }}"
+        dest: "{{ nginx_path_geoip }}/GeoListCountry.dat.gz"
       register: nginx_download_geolite_country
 
     - name: Unpack GeoLite Country database
-      shell: "gunzip {{nginx_download_geolite_country.dest}} && mv /tmp/GeoLiteCountry.dat {{ nginx_path_geoip }}/"
+      shell: gunzip {{nginx_download_geolite_country.dest}} 
 
     - name: Download GeoLite City database
-      get_url: "url={{ nginx_geoip_city_url }} dest=/tmp"
+      get_url: 
+        url: "{{ nginx_geoip_city_url }}"
+        dest: "{{ nginx_path_geoip }}/GeoLiteCity.dat.gz"
       register: nginx_download_geolite_city
 
     - name: Unpack GeoLite City database
-      shell: "gunzip {{nginx_download_geolite_city.dest}} && mv /tmp/GeoLiteCity.dat {{ nginx_path_geoip }}/"
+      shell: gunzip {{nginx_download_geolite_city.dest}}
   when: (nginx_enable_geoip | default(true))
