@@ -1,5 +1,6 @@
 ---
-- stat: "path={{ nginx_path_geoip }}/GeoLiteCity.dat"
+- name: Check for existing GeoIP databases
+  stat: "path={{ nginx_path_geoip }}/GeoLiteCity.dat"
   register: nginx_geoip_stat
 
 - name: Set up GeoIp databases for nginx
@@ -26,4 +27,4 @@
 
     - name: Unpack GeoLite City database
       shell: gunzip --force {{nginx_download_geolite_city.dest}}
-  when: (nginx_enable_geoip | default(true)) or (nginx_geoip_stat.stat.exists is defined and not nginx_geoip_stat.stat.exists)
+  when: (nginx_enable_geoip | default(true)) and (nginx_geoip_stat.stat.exists is defined and not nginx_geoip_stat.stat.exists)
