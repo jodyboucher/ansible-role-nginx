@@ -2,6 +2,7 @@
 nginx_path_config: /etc/nginx
 nginx_path_conf_file: "{{ nginx_path_config }}/nginx.conf"
 nginx_path_conf_directory: "{{ nginx_path_config }}/conf.d"
+nginx_path_geoip: /etc/nginx/geoip
 nginx_path_mime_types_file: "{{ nginx_path_config }}/mime.types"
 nginx_pidfile: /run/nginx.pid
 nginx_path_ssl_conf: "{{ nginx_path_config }}/ssl"

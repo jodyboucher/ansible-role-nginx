@@ -23,6 +23,10 @@ pid        {{ nginx_pidfile }};
 {{ nginx_core_extra}}
 {% endif %}
 
+{% if nginx_enable_geoip %}
+load_module modules/ngx_http_geoip_module.so;
+{% endif %}
+
 http {
     # Show/Hide nginx version information.
     server_tokens {{ nginx_http_server_tokens }};
@@ -35,7 +39,14 @@ http {
     # text/html is always included by charset module.
     charset_types text/css text/plain text/vnd.wap.wml application/javascript application/json application/rss+xml application/xml;
 
+    {% if nginx_enable_geoip %}
+    load_module "modules/ngx_http_geoip_module.so";
+    geoip_country {{ nginx_path_geoip }}/GeoIP.dat;      # the country IP database
+    geoip_city {{ nginx_path_geoip }}/GeoLiteCity.dat;   # the city IP database
+    log_format main {{ nginx_log_format_geoip | indent(20) }};
+    {% else %}
     log_format main {{ nginx_log_format | indent(20) }};
+    {% endif %}
 
     # Log access to this file
     # This is only used when you don't override it on a server{} level

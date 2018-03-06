@@ -3,11 +3,16 @@
 nginx_ppa_enable: true
 nginx_ppa_version: stable
 
+nginx_enable_geoip: true
+
 nginx_log_format: |
   '$remote_addr - $remote_user [$time_local] "$request" '
   '$status $body_bytes_sent "$http_referer" '
-  '"$http_user_agent" "$http_x_forwarded_for"'
-
+  '"$http_user_agent" "$http_x_forwarded_for" '
+nginx_log_format_geoip: |
+  '{{ vars["nginx_log_format"]}}} '
+  '$geoip_country_name $geoip_country_code '
+  '$geoip_region_name $geoip_city '
 # core module settings
 nginx_core_worker_processes: auto
 nginx_core_worker_connections: 1024
