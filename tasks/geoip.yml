@@ -9,7 +9,7 @@
     - name: Download GeoLite Country database
       get_url: 
         url: "{{ nginx_geoip_country_url }}"
-        dest: "{{ nginx_path_geoip }}/GeoListCountry.dat.gz"
+        dest: "{{ nginx_path_geoip }}/GeoLiteCountry.dat.gz"
       register: nginx_download_geolite_country
 
     - name: Unpack GeoLite Country database
