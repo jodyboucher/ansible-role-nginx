@@ -14,9 +14,3 @@
   apt:
     name: nginx
     state: installed
-
-- name: Install nginx GeoIP module
-  apt:
-    name: nginx-module-geoip
-    state: installed
-  when: (nginx_enable_geoip | default(true)) == true
