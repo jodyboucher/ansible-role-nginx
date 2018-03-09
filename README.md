@@ -11,7 +11,7 @@ This role is designed for Ubuntu 16.04 Xenial.
 * [Ansible](https://docs.ansible.com/ansible/intro_installation.html) >= 2.4 (makes use of new import_tasks module)
 * This role requires `root` access so be sure to enable privilege escalation:
 
-```
+```yaml
 # privilege escalation of play
 - hosts: webservers
   become: true
@@ -28,7 +28,8 @@ This role is designed for Ubuntu 16.04 Xenial.
 ## Role Variables
 
 The available variables of this role are listed here along with default values:
-```
+
+```yaml
 # The user under which nginx will run
 nginx_user: www-data
 
@@ -64,7 +65,8 @@ nginx_path_vhosts: /etc/nginx/sites-enabled
 ```
 
 Additional variables are listed below, along with default values (see `defaults/main.yml`):
-```
+
+```yaml
 ---
 # Use the official Nginx PPA for Ubuntu, and the version to use if so.
 nginx_ppa_enable: true
@@ -186,7 +188,7 @@ None.
 
 ## Example Playbook
 
-```
+```yaml
 ---
 - hosts: webservers
   become: true
@@ -198,7 +200,7 @@ None.
 
 Inside `vars/main.yml`:
 
-```
+```yaml
 ---
 nginx_user: www-data
 
@@ -212,13 +214,14 @@ nginx_http_upstreams:
 ## Installation
 
 On the command-line:
-```
-$ ansible-galaxy install git+https://github.com/jodyboucher/ansible-role-nginx.git
+
+```bash
+ansible-galaxy install git+https://github.com/jodyboucher/ansible-role-nginx.git
 ```
 
 or in a role file (requirements.yml):
 
-```
+```yaml
 - name: nginx
   src: https://github.com/jodyboucher/ansible-role-nginx
   version: master
