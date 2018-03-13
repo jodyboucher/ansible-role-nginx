@@ -43,7 +43,7 @@ nginx_path_conf_file: /etc/nginx/nginx.conf
 nginx_path_conf_directory: /etc/nginx/conf.d
 
 # Directory containing GeoIP data
-nginx_path_geoip: /etc/nginx/geoip"
+nginx_path_geoip: /etc/nginx/geoip
 
 # Path of the file contained MIME type definitions
 nginx_path_mime_types_file: /etc/nginx/mime.types
