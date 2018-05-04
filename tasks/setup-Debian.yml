@@ -8,9 +8,9 @@
 - name: Install ssl-cert
   apt:
     name: ssl-cert
-    state: installed
+    state: present
 
 - name: Install nginx
   apt:
     name: nginx
-    state: installed
+    state: present
