@@ -29,11 +29,11 @@ script:
   - docker exec --tty "$(cat ${file_container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} --syntax-check
 
   # TEST: role tasks execute without failures
-  - docker exec --tty "$(cat ${file_container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook}
+  - travis_wait docker exec --tty "$(cat ${file_container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook}
 
   # TEST: role is indempotent
   - file_idempotence_output=$(mktemp)
-  - docker exec "$(cat ${file_container_id})" ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} | tee -a ${file_idempotence_output}
+  - travis_wait docker exec "$(cat ${file_container_id})" ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} | tee -a ${file_idempotence_output}
   - >
     tail ${file_idempotence_output} | grep -q 'changed=0.*failed=0'
     && (echo 'Idempotence test: pass' && exit 0)
