@@ -28,7 +28,7 @@
   notify: reload nginx
 
 - name: Generate strong Ephemeral Diffie-Hellman (DHE) parameter
-  command: openssl dhparam -out dhparam.pem 2048
+  command: openssl dhparam -out dhparam.pem 4096
   args:
     chdir: "{{ nginx_path_ssl_conf }}"
     creates: "{{ nginx_path_ssl_conf }}/dhparam.pem"
